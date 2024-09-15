@@ -1,0 +1,14 @@
+{
+  "validLogin": {
+    "username": "U2FsdGVkX19cUa8ZZ9IiQzpRmU4VST+XtAgX207KH3U=",
+    "password": "U2FsdGVkX19wY9W7iastPu/XzWcgum7gGvyxVXF8KCU="
+  },
+  "invalidLogin": {
+    "username": "matomammjcccc",
+    "password": "ttatttatatat"
+  },
+  "wrongPasswordLogin": {
+    "username": "raghunandan",
+    "password": "23erfghnbvghuiop"
+  }
+}
