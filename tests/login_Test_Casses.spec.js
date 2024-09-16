@@ -1,19 +1,16 @@
 const { test, expect } = require('@playwright/test')
 const Home = require('../page_objects/home_login.js');
 const fs = require('fs');
-const credentials = JSON.parse(fs.readFileSync('testData/creds.json'));
 const CryptoJS = require('crypto-js');
-const path = require('path');
 
-require('dotenv').config({ path: path.resolve(__dirname, '.env') });
-
+const credentials = JSON.parse(fs.readFileSync('testData/creds.json'));
 test.beforeEach(async ({ page }) => {
-    await page.goto('https://www.demoblaze.com/index.html')
+    await page.goto(credentials.url)
     //get title of page and validate
     const title = await page.title()
     console.log('Page title is: ' + title)
     await expect(page).toHaveTitle('STORE')
-    await expect(page).toHaveURL("https://www.demoblaze.com/index.html")
+    await expect(page).toHaveURL(credentials.url)
 
     //define dialog box handling before event is triggered
     page.on('dialog', async (dialog) => {
@@ -28,8 +25,8 @@ test.beforeEach(async ({ page }) => {
 })
 
 test('01 Test invalid login senerio', async ({ page }) => {
-    //click on login and validate the errtor message on dialog box
-    //Use of POM for home page
+    //click on login and validate the error message on dialog box
+    //Use of POM
     const homepage = new Home(page);
     await homepage.clickLogin()
 
@@ -49,11 +46,8 @@ test('02 Test valid login scenario', async ({ page }) => {
     // Decrypt username and password using AES decryption
     const decryptedUsername = CryptoJS.AES.decrypt(credentials.validLogin.username, process.env.secret_key).toString(CryptoJS.enc.Utf8);
     const decryptedPassword = CryptoJS.AES.decrypt(credentials.validLogin.password, process.env.secret_key).toString(CryptoJS.enc.Utf8);
-    // Print the decrypted password for debugging purposes
-    console.log('Decrypted password:', decryptedPassword);
     // Perform login using decrypted credentials
     await homepage.performLogin(decryptedUsername, decryptedPassword);
-    page.pause()
     // Validate successful login
     await homepage.validateSuccess(decryptedUsername);
 });
